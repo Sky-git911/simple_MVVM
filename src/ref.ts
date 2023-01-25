@@ -1,4 +1,5 @@
 import { isObject, isRef } from "./checkUtils";
+import { track, trigger } from "./reactive";
 
 export const ref = function (value: any) {
   if (isObject(value)) {
@@ -10,10 +11,12 @@ export const ref = function (value: any) {
     isRef: { value: true },
     value: {
       get() {
+        track(result, "value");
         return value;
       },
       set(newValue) {
         value = newValue;
+        trigger(result, "value");
       },
     },
   });
