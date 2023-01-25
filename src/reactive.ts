@@ -1,4 +1,4 @@
-import { isObject } from "./checkUtils";
+import { isObject } from "./utils";
 
 // 目标对象到映射对象(暂存已经代理过的对象)
 const proxyedReactiveMap = new WeakMap();
