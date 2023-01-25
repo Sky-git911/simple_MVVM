@@ -15,11 +15,19 @@ export const reactive = function (target: object) {
     get(target: object, key: string | symbol, receiver) {
       let result = Reflect.get(target, key, receiver);
 
+      if (Array.isArray(result)) {
+        track(target, key);
+        return reactiveArray(result, target, key);
+      }
+
+      track(target, key);
       return isObject(result) ? reactive(result) : result;
     },
     set(target: object, key: string | symbol, value: unknown, receiver) {
-      Reflect.set(target, key, value, receiver);
-      return true;
+      let result = Reflect.set(target, key, value, receiver);
+
+      trigger(target, key);
+      return result;
     },
   };
 
@@ -29,6 +37,34 @@ export const reactive = function (target: object) {
 
   return observed;
 };
+
+/**
+ * 设置响应式数组
+ */
+function reactiveArray(
+  targetArr: Array<any>,
+  targetObj: Record<any, any>,
+  Arrkey: string | symbol
+) {
+  let handler: ProxyHandler<Record<any, any>> = {
+    get(target, key, receiver) {
+      const res = Reflect.get(target, key, receiver);
+
+      if (isObject(res)) {
+        return reactive(res);
+      }
+
+      return res;
+    },
+    set(target, key, value, receiver) {
+      const res = Reflect.set(target, key, value, receiver);
+      trigger(targetObj, Arrkey);
+      return res;
+    },
+  };
+  console.log("设置数组", targetArr);
+  return new Proxy(targetArr, handler);
+}
 
 type Dep = Set<ReactiveEffect>;
 type KeyMap = Map<any, Dep>; // key 是 target 中的某个 key , 其对应的 value 是和该 key 所有绑定的 effect 的集合，是一个 Set。
