@@ -12,7 +12,6 @@ type VNodeOptions = {
   attrs?: elemOption;
   event?: EventOptions;
   children?: VNode[];
-  el: Element | Text | undefined; // 存放真实元素对象
   nodeValue?: string; // 文本元素的值
   type: NodeType;
 };
@@ -27,7 +26,7 @@ export class VNode {
   attrs: elemOption = {};
   event: EventOptions = {};
   children: VNode[] = [];
-  el: Element | Text | undefined;
+  el: Element | Text | undefined; // 存放真实元素对象
   nodeValue?: string;
   type: NodeType;
 
