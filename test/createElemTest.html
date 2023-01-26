@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="../dist/bundle.js"></script>
+    <script>
+      const { createElement, createText } = simpleMVVM;
+      const vdom = createElement("div", {
+        attrs: { id: "app" },
+        event: { click: "handleClick" },
+      });
+      console.dir(vdom);
+      /* VNode
+            attrs: {id: 'app'}
+            children: []
+            event: {click: 'handleClick'}
+            nodeValue: undefined
+            tagName: "div"
+            type: 1
+      */
+
+      const vnode = createElement("div", {}, [
+        createElement("h1", { attrs: { class: "h1" } }),
+      ]);
+
+      console.log(vnode);
+
+      const text = createText("我是文本");
+      console.log(text);
+      /*
+        attrs: {}
+        children: []
+        event: {}
+        nodeValue: "我是文本"
+        tagName: undefined
+        type: 3
+      */
+    </script>
+  </body>
+</html>
