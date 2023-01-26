@@ -3,7 +3,7 @@ import { toArray } from "./utils";
 const removeSpaceAndLineBreak = /\s*|[\r\n]/g; // 去掉多余的空格和换行符
 const escape = /({{([\s\S]+?)}})+/g;
 
-type elmOption = {
+export type elemOption = {
   [props: string]: any;
 };
 
@@ -13,14 +13,14 @@ type elmOption = {
  * 借助 with() {} 语法，保证表达式能从环境中取到对应的值
  */
 export const compile = function (element: Element) {
-  let code = `with(this) {return ${processEle(element)}}`;
+  let code = `with(this) {return ${processElem(element)}}`;
   return new Function(code);
 };
 
 /**
  *  处理元素
  */
-const processEle = function (element: Element | Text) {
+const processElem = function (element: Element | Text) {
   let code = "";
   // 处理元素节点， _c 代替 createElement
   if (element instanceof Element) code = `_c("${element.localName}",`;
@@ -38,7 +38,7 @@ const processEle = function (element: Element | Text) {
   code += processAttrs(element);
 
   // 子元素递归调用
-  let children = toArray(element.childNodes).map(processEle);
+  let children = toArray(element.childNodes).map(processElem);
   code += `,[${children.join(",")}]`;
 
   return (code += ")");
@@ -50,7 +50,7 @@ const processEle = function (element: Element | Text) {
 const processAttrs = function ({ attributes }: Element) {
   let code: string[] = [];
   // options 结构：{attr: {key: value or expression}, event: {key: expression}}
-  let options: elmOption = {
+  let options: elemOption = {
     attrs: [],
     event: [],
   };
