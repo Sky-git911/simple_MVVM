@@ -12,7 +12,7 @@ type createText = (value: string) => VNode;
 /**
  * 创建元素
  */
-const createElement: createElement = function (
+export const createElement: createElement = function (
   tagName,
   { attrs, event },
   children = []
@@ -37,7 +37,7 @@ const createElement: createElement = function (
 /**
  * 创建文本
  */
-const createText: createText = function (value) {
+export const createText: createText = function (value) {
   return new VNode({
     nodeValue: value,
     type: NodeType.Text,
