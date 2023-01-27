@@ -9,6 +9,9 @@
   <body>
     <script src="../dist/createElemTest.js"></script>
     <script>
+      /**
+       * 测试生成 vnode 结果
+       */
       const { createElement, createText } = simpleMVVM;
       const vdom = createElement("div", {
         attrs: { id: "app" },
