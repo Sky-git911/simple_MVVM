@@ -1,4 +1,4 @@
-import { elemOption } from "./compiler";
+import { elemOption } from "../compiler";
 
 export enum NodeType {
   Element = 1,

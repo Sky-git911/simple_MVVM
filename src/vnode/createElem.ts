@@ -1,4 +1,4 @@
-import { elemOption } from "./compiler";
+import { elemOption } from "../compiler";
 import { VNode, NodeType } from "./vnode";
 
 export type createElement = (

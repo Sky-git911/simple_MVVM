@@ -1,6 +1,6 @@
 import { ComponentInstance } from "./createAPP";
-import { getValue, isRef } from "./utils";
-import { NodeType, VNode } from "./vnode";
+import { getValue, isRef } from "../utils";
+import { NodeType, VNode } from "../vnode/vnode";
 
 export function patch(
   oldVNode: VNode | undefined,

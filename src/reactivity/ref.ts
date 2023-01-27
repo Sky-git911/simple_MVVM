@@ -1,4 +1,4 @@
-import { isObject, isRef } from "./utils";
+import { isObject, isRef } from "../utils";
 import { track, trigger } from "./reactive";
 
 export const ref = function (value: any) {

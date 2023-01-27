@@ -1,8 +1,8 @@
-import { compile } from "./compiler";
-import { createElement } from "./createElem";
+import { compile } from "../compiler";
+import { createElement } from "../vnode/createElem";
 import { patch } from "./patch";
-import { getValue } from "./utils";
-import { VNode } from "./vnode";
+import { getValue } from "../utils";
+import { VNode } from "../vnode/vnode";
 
 interface setupOptions {
   setup?: (fn: createElement) => any;

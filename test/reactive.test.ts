@@ -1,5 +1,5 @@
-import { reactive } from "../src/reactive";
-import { ref } from "../src/ref";
+import { reactive } from "../src/reactivity/reactive";
+import { ref } from "../src/reactivity/ref";
 
 describe("测试数据劫持代理", () => {
   it("对象", () => {
