@@ -1,6 +1,7 @@
 import { compile } from "./compiler";
 import { createElement } from "./createElem";
-import { isRef } from "./utils";
+import { patch } from "./patch";
+import { getValue } from "./utils";
 import { VNode } from "./vnode";
 
 interface setupOptions {
@@ -49,7 +50,7 @@ const createApp = function (options: setupOptions) {
       instance.el = el;
       //拿到需要挂载的 dom 元素后，将目标 dom 树编译成 render 函数
       instance.render = compile(el);
-
+      // 处理 setup 方法 -> 将数据对象代理至 instance 上，这样就可以通过 this.xxx 拿到数据了
       processSetup(instance);
 
       let vnode = instance.render.call(instance.proxy);
@@ -59,10 +60,6 @@ const createApp = function (options: setupOptions) {
     },
   };
   return app;
-};
-
-const getValue = function (target: any) {
-  return isRef(target) ? target.value : target;
 };
 
 const createInstance = function (options: setupOptions): ComponentInstance {
