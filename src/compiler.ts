@@ -56,7 +56,6 @@ const processAttrs = function ({ attributes }: Element) {
   };
   let attrs: any[] = Array.prototype.slice.call(attributes);
   attrs.forEach(({ name, value }) => {
-    console.log(name, value);
     // 非原生属性  key 要把前缀删掉(:  @)
     if (name[0] === ":") {
       // : 开头的动态属性

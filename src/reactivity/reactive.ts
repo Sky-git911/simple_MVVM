@@ -65,8 +65,11 @@ function reactiveArray(
       trigger(targetObj, Arrkey);
       return res;
     },
+    deleteProperty(target: object, key: string | symbol) {
+      const result = Reflect.deleteProperty(target, key);
+      return result;
+    },
   };
-  console.log("设置数组", targetArr);
   return new Proxy(targetArr, handler);
 }
 
