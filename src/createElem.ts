@@ -1,13 +1,13 @@
 import { elemOption } from "./compiler";
 import { VNode, NodeType } from "./vnode";
 
-type createElement = (
+export type createElement = (
   tagName: string,
   options: elemOption,
   children: Array<VNode | string>
 ) => VNode;
 
-type createText = (value: string) => VNode;
+export type createText = (value: string) => VNode;
 
 /**
  * 创建元素
