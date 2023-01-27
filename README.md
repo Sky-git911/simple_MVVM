@@ -28,7 +28,7 @@ yarn build / npm run build
 ### 测试
 
 ```
-yarn test
+yarn test / npm run test
 ```
 
 
