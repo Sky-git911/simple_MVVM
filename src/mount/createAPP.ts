@@ -3,6 +3,7 @@ import { createElement } from "../vnode/createElem";
 import { patch } from "./patch";
 import { getValue } from "../utils";
 import { VNode } from "../vnode/vnode";
+import { effect, ReactiveEffect } from "../reactivity/reactive";
 
 interface setupOptions {
   setup?: (fn: createElement) => any;
@@ -23,6 +24,7 @@ export interface ComponentInstance {
   proxy: object;
   vnode?: VNode;
   setupRes?: any;
+  update?: ReactiveEffect;
 }
 
 /**
@@ -53,10 +55,16 @@ export const createApp = function (options: setupOptions) {
       // 处理 setup 方法 -> 将数据对象代理至 instance 上，这样就可以通过 this.xxx 拿到数据了
       processSetup(instance);
 
-      let vnode = instance.render.call(instance.proxy);
-      let oldVNode = instance.vnode;
-      instance.vnode = vnode;
-      patch(oldVNode, vnode, instance);
+      // 用 effect 方法包裹 render 方法去 处理和 patch 过程
+      // 这样第一次处理并调用 render 函数时会进行依赖收集
+      // 之后每次数据变化都会调用 instance.update 来实时刷新页面
+      instance.update = effect(function () {
+        let vnode = instance.render?.call(instance.proxy);
+        let oldVNode = instance.vnode;
+        instance.vnode = vnode;
+
+        patch(oldVNode, vnode, instance);
+      });
     },
   };
   return app;
