@@ -1,5 +1,5 @@
 import { ComponentInstance } from "./createAPP";
-import { getValue } from "./utils";
+import { getValue, isRef } from "./utils";
 import { NodeType, VNode } from "./vnode";
 
 export function patch(
@@ -29,7 +29,11 @@ function vnodeToElem(vnode: VNode) {
   let el = document.createElement(vnode.tagName);
   //   设置元素属性
   for (let key in vnode.attrs) {
-    el.setAttribute(key, vnode.attrs[key]);
+    if (isRef(vnode.attrs[key])) {
+      el.setAttribute(key, vnode.attrs[key].value);
+    } else {
+      el.setAttribute(key, vnode.attrs[key]);
+    }
   }
   //   绑定元素事件
   for (let key in vnode.event) {
