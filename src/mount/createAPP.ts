@@ -65,6 +65,7 @@ export const createApp = function (options: setupOptions) {
 
         patch(oldVNode, vnode, instance);
       });
+      return app;
     },
   };
   return app;
