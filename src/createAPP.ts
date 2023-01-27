@@ -30,7 +30,7 @@ export interface ComponentInstance {
  * mount 方法：挂载页面
  * 大概流程：compiler 处理模版得到 render 函数，  处理 setup 得到数据
  */
-const createApp = function (options: setupOptions) {
+export const createApp = function (options: setupOptions) {
   let instance = createInstance(options);
   /**
    * app 实例中
