@@ -29,6 +29,10 @@ export const reactive = function (target: object) {
       trigger(target, key);
       return result;
     },
+    deleteProperty(target: object, key: string | symbol) {
+      const result = Reflect.deleteProperty(target, key);
+      return result;
+    },
   };
 
   let observed = new Proxy(target, handler);
