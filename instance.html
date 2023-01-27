@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .drag{
+            width: 200px;
+            height: 200px;
+            background-color: pink;
+            text-align: center;
+            line-height: 200px;
+            font-size: 40px;
+            color: rgba(240, 255, 255, 0.596);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        输入框: 
+        <input id="input" class="name" :value="number" @input="change"></input>
+        <br/>
+        <div>输入的值是：{{number}}</div>
+        <br/>
+        <button @click="clickHandler">count is: {{data.count}}</button>
+
+        <div class="drag" draggable="true" @drag = 'handleDrag'>可拖动</div>
+    </div>
+</body>
+<script src="../dist/bundle.js"></script>
+
+<script>
+    const { reactive, ref, createApp } = simpleMVVM;
+
+    const vm = createApp({
+        setup() {
+            let number = ref('hello world');
+            let data = reactive({
+                count: 0
+            });
+            const handleDrag = (e) => {
+                console.log('offsetX:',e.offsetX, 'offsetY:',e.offsetY);
+            }
+            const arr = reactive([10,20,30])
+            console.log(arr) // Proxy {0: 10, 1: 20, 2: 30}
+            arr.push(40);
+            arr.shift()
+            console.log(arr) // Proxy {0: 20, 1: 30, 2: 40}
+
+            return {
+                number,
+                data,
+                change: (e) => void (number.value = e.target.value),
+                clickHandler: () => void (data.count += 1),
+                handleDrag
+            }
+        }
+    })
+    vm.mount('#app');
+</script>
+</html>
