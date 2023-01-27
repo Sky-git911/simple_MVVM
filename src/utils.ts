@@ -14,3 +14,7 @@ interface ArrayLike {
 export function toArray(arr: ArrayLike) {
   return Array.prototype.slice.call(arr);
 }
+
+export function getValue(target: any) {
+  return isRef(target) ? target.value : target;
+}
