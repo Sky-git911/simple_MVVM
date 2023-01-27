@@ -56,6 +56,7 @@ const processAttrs = function ({ attributes }: Element) {
   };
   let attrs: any[] = Array.prototype.slice.call(attributes);
   attrs.forEach(({ name, value }) => {
+    console.log(name, value);
     // 非原生属性  key 要把前缀删掉(:  @)
     if (name[0] === ":") {
       // : 开头的动态属性
@@ -63,6 +64,9 @@ const processAttrs = function ({ attributes }: Element) {
     } else if (name[0] === "@") {
       // @ 开头的事件
       options.event.push(`${name.slice(1)}:${value}`);
+      // } else if (name[0] === "v") {  toDo...
+      //   // v- 开头的事件
+      //   options.event.push(`${name.split("-")[1]}:${value}`);
     } else {
       // 原生的元素属性 如 class="box"
       options.attrs.push(`${name}:"${value}"`);
