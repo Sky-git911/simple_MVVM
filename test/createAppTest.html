@@ -8,11 +8,11 @@
 </head>
 <body>
     <div id="app">
-        <label for="input">输入框: </label>
+        输入框: 
 
         <input id="input" class="name" :value="number" @input="change"></input>
 
-        <div>我的输入：{{number}}</div>
+        <div>输入的值是：{{number}}</div>
         <button @click="clickHandler">click</button>
         点击了：{{data.count}} 下
     </div>
@@ -22,7 +22,7 @@
 <script>
     const { reactive, ref, createApp } = simpleMVVM;
 
-    createApp({
+    const vm = createApp({
         setup() {
             let number = ref('hello world');
             let data = reactive({
@@ -35,6 +35,7 @@
                 clickHandler: () => void (data.count += 1)
             }
         }
-    }).mount('#app');
+    })
+    vm.mount('#app');
 </script>
 </html>
