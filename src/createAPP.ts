@@ -1,6 +1,7 @@
 import { compile } from "./compiler";
 import { createElement } from "./createElem";
 import { isRef } from "./utils";
+import { VNode } from "./vnode";
 
 interface setupOptions {
   setup?: (fn: createElement) => any;
@@ -12,13 +13,15 @@ interface App {
   mount: (selector: string) => void;
 }
 
-interface ComponentInstance {
+export interface ComponentInstance {
   $option: setupOptions;
   render?: Function;
   el?: Element;
   _c: createElement;
   _v: (target: any) => any;
   proxy: object;
+  vnode?: VNode;
+  setupRes?: any;
 }
 
 /**
@@ -33,7 +36,7 @@ const createApp = function (options: setupOptions) {
    * $option 储存原始配置
    * component 存组件实例
    * mount 用于向目标元素挂载
-   * 其中会有 _c、_v 供 render 函数调用
+   * 其中 instance 的 _c、_v 供 render 函数调用
    */
   let app: App = {
     $option: options,
@@ -48,6 +51,11 @@ const createApp = function (options: setupOptions) {
       instance.render = compile(el);
 
       processSetup(instance);
+
+      let vnode = instance.render.call(instance.proxy);
+      let oldVNode = instance.vnode;
+      instance.vnode = vnode;
+      patch(oldVNode, vnode, instance);
     },
   };
   return app;
@@ -70,4 +78,32 @@ const createInstance = function (options: setupOptions): ComponentInstance {
 /** 
  处理实例中的 setup 函数
  */
-const processSetup = function (instance: ComponentInstance) {};
+const processSetup = function (instance: ComponentInstance) {
+  let { setup } = instance.$option;
+  if (setup) {
+    instance.setupRes = setup.call(instance, createElement);
+    let setupRes = instance.setupRes;
+
+    instance.proxy = new Proxy(instance, {
+      get: (target: ComponentInstance, key: string, receiver) => {
+        if (key in setupRes) {
+          return setupRes[key];
+        } else {
+          return Reflect.get(target, key, receiver);
+        }
+      },
+      set(target: ComponentInstance, key: string, value: any, receiver) {
+        if (key in setupRes) {
+          setupRes[key] = value;
+          return true;
+        }
+        let result = Reflect.set(target, key, value, receiver);
+        return result;
+      },
+      //   has 方法， 帮助 with 语句拿到结果
+      has(target: ComponentInstance, key: string) {
+        return key in setupRes || Reflect.has(target, key);
+      },
+    });
+  }
+};
