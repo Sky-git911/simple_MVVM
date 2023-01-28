@@ -1,6 +1,8 @@
 # 一个简单的 MVVM 框架
 基于 `vue3` 的响应式原理实现的一个简单的 `MVVM` 模型
 
+- 基本示例
+
 ![基本示例](static/基本示例.gif)
 
 框架主要实现的几个部分：
@@ -27,6 +29,8 @@ yarn build / npm run build
 
 打包构建后打开根目录 `instance.html`即可
 
+或直接访问网址预览 **http://120.27.147.43:9999/**
+
 ### 测试
 
 ```
@@ -34,6 +38,112 @@ yarn test / npm run test
 ```
 
 
+
+## 快速使用
+
+```js
+// 项目打包后，新建 html 文件， 引入打包后的 bundle.js 文件
+<script src="./dist/bundle.js"></script>
+
+// 引入后，解构文件中的对象 (这里的对象名称定义为 simpleMVVM)
+const { reactive, ref, createApp } = simpleMVVM;
+// 支持引入的模块有： reactive, ref, createApp, effect, compile, createElement, createText
+
+// 支持元素的原生属性和事件， 以及动态属性如 :value  <input :value="name"></input>
+// 原生事件如 click、mouseenter。。。 用 @ 开头   <input @click="handleClick"></input>
+// 指令: 暂时仅支持 v-show, 其余指令事件待补充扩展
+```
+
+- reactive  /  ref  响应式数据
+
+```js
+const { reactive, ref } = simpleMVVM;
+let data = reactive({
+    name: "hello",
+});
+let name = ref("world");
+console.log(`${data.name} ${name.value}`)
+```
+
+- effect  监控数据变化
+
+```js
+const { reactive, ref, effect } = simpleMVVM;
+let data = reactive({
+    title: "hello",
+});
+let name = ref("world");
+effect(function () {
+  console.log(`${data.title} ${name.value}`);  // hello world
+});
+data.title = "Hello"; //Hello world
+name.value = "World"; //Hello World
+```
+
+- compile   模板编译
+
+```html
+<div id="app">
+        <label for="input">输入框: </label>
+        <input id="input" :value="name" @input="change"></input>
+        <div>输入结果: {{input}}</div>
+</div>
+```
+
+```js
+const { compile } = simpleMVVM;
+let node = document.querySelector('#app');
+console.log(compile(node));
+```
+
+- createElement / createText   生成虚拟dom
+
+```js
+const { createElement, createText } = simpleMVVM;
+const vdom = createElement("div", {
+    attrs: { id: "app" },
+    event: { click: "handleClick" },
+});
+console.dir(vdom);
+
+const vnode = createElement("div", {}, [
+    createElement("h1", { attrs: { class: "h1" } }),
+]);
+console.dir(vnode);
+```
+
+- createApp   创建实例 (setup语法)
+
+```html
+<div id="app">
+    输入框: 
+    <input id="input" :value="number" @input="change"></input>
+    <br/>
+    <div>输入的值是：{{number}}</div>
+    <br/>
+    <button @click="clickHandler">count is: {{data.count}}</button>
+</div>
+```
+
+```js
+const { reactive, ref, createApp } = simpleMVVM;
+
+const vm = createApp({
+    setup() {
+        let number = ref('hello world');
+        let data = reactive({
+            count: 0
+        });
+        return {
+            number,
+            data,
+            change: (e) => void (number.value = e.target.value),
+            clickHandler: () => void (data.count += 1),
+        }
+    }
+})
+vm.mount('#app');
+```
 
 ## 代码结构
 
@@ -279,7 +389,7 @@ export const compile = function (element: Element) {
 > 如: `createElement(tagName, options, children)` 方法接收三个参数: 
 >
 > - `tagName`: 元素节点的 tagName
-> - `options`: 冤死的各种属性 (在这个简易框架中只实现属性和事件)
+> - `options`: 元素的各种属性 (在这个简易框架中只实现属性和事件)
 > - `children`: 父元素的子元素集合
 > 如此一来只需要将模板处理成: `createElement(tagName, {attrs: ..., event: ...}, [createElement(...), ...])` 即可
 
@@ -723,3 +833,22 @@ diff 过程中对每一个节点进行比较，不同的话就直接替换整个
 
 ![双向绑定](static/双向绑定.gif)
 
+
+
+## 不足与展望
+
+>  该简易框架参照`Vue3`的使用方法，实现了数据劫持、发布订阅模式、数据的响应式双向绑定，还实现了一个简易的模板编译生成`render`函数，再去生成虚拟`dom`，以及新旧节点的patch过程；但是所能展现的效果和功能点依旧是局限的：
+>
+> 1. 在这个框架中，实现了插值表达式 ( {{xxx}} )，但是在 `compile` 过程中仅对一个元素中的插值表达式做处理，无法在同一个节点内连用两个表达式；
+>
+> 2. 对于像 `VUE` 中的计算属性侦听属性等，在该框架中是没有体现的；对于侦听属性`watch`, 则是使用一个简易的 `effect` 去代替，功能方面也是不完备的；
+>
+> 3. 对于条件渲染，框架中只实现了类似 `v-show` 的功能， 不过对于像`v-if` `v-for`  `v-html`等之类的功能，可以在框架中对其进行拓展处理的；
+>
+> 4. 对于 `dom` 身上的各种属性，该框架只处理了元素的原生属性和事件，所以暂且基于这个框架，以此而言想要在`dom`身上实现的效果是比较局限的。
+>
+>    ......
+
+
+
+> 框架所涉及到的应用原理，对于普通的业务开发我认为是更加底层的。通过开发这个简易的MVVM框架，明白了想要设计一个完备且稳定的程序，是需要具备多方面的知识的。我希望在以后的前端之旅中，能更加深入地去理解这些知识；慢慢维护这个框架，把上述的不足之处能在框架中所实现，提升代码的设计能力、健壮性、鲁棒性。
