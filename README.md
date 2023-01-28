@@ -1,6 +1,8 @@
 # 一个简单的 MVVM 框架
 基于 `vue3` 的响应式原理实现的一个简单的 `MVVM` 模型
 
+![基本示例](.\static\基本示例.gif)
+
 框架主要实现的几个部分：
 - reactivity: 响应式数据 使用 proxy 数据代理实现数据劫持。
 - compiler： 模板编译，这里没有将模板字符串转换成为`AST`，而是直接获取 Element 将其处理成 render 函数。
@@ -358,11 +360,11 @@ const processElem = function (element: Element | Text) {
   }
 ```
 
+  效果如图：
 
+![v-show](.\static\v-show.gif)
 
-
-
-
+##### 处理元素属性
 
 ```ts
 const processAttrs = function ({ attributes }: Element) {
