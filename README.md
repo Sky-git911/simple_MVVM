@@ -260,7 +260,7 @@ words.value = "World"; // Hello World
 
 效果如图：
 
-![响应式](.\static\响应式.gif)
+![响应式](static/响应式.gif)
 
 ### compiler 模板编译器 将其处理成 render 函数
 
