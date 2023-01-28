@@ -4,8 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Simple MVVM</title>
     <style>
+        #app{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #input{
+            margin: 20px 0;
+        }
         .font {
             text-align: center;
             line-height: 200px;
@@ -15,6 +23,7 @@
         .box {
             width: 200px;
             height: 200px;
+            margin: 30px 0;
         }
         .drag{
             background-color: pink;
@@ -22,19 +31,32 @@
         .show{
             background-color:rgb(42, 66, 58);
         }
+
+        .mouse{
+            font-size: 30px;
+            background-color: rgb(71, 71, 122);
+        }
     </style>
 </head>
 <body>
     <div id="app">
-        输入框: 
-        <input id="input" class="name" :value="number" @input="change"></input>
-        <br/>
-        <div>输入的值是：{{number}}</div>
+        <h1>一个简易的 MVVM 框架</h1>
+        <span>可在控制台中 直接输出 vm 查看实例对象</span>
+        <br />
+        <div>
+            输入框: 
+            <input id="input" class="name" :value="number" @input="change"></input>
+            
+            <div>输入的值是：{{number}}</div>
+        </div>
+
         <br/>
         <button @click="clickHandler">count : {{data.count}}</button>
+        
+        <div class="box drag font" draggable="true" @drag = 'handleDrag'>可拖拽</div>
         <br/>
-        <br/>
-        <div class="box drag font" draggable="true" @drag = 'handleDrag'>可拖动</div>
+
+        <div class="box font mouse" @mouseenter="handleEnter" @mouseleave="handleLeave">鼠标移入移出</div>
 
         <button @click='handleToggle'>切换显示</button>
         <div v-show="isShow" class=" box show font">展示和隐藏</div>
@@ -68,6 +90,14 @@
                 isShow.value = !isShow.value;  
             }
 
+
+            const handleEnter = () => {
+                console.log('鼠标进入')
+            }
+            const handleLeave = () => {
+                console.log('鼠标离开')
+            }
+
             return {
                 isShow,
 
@@ -76,7 +106,9 @@
                 change: (e) => void (number.value = e.target.value),
                 clickHandler: () => void (data.count += 1),
                 handleDrag,
-                handleToggle
+                handleToggle,
+                handleEnter,
+                handleLeave
             }
         }
     })
