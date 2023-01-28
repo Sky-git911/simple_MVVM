@@ -6,14 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .drag{
-            width: 200px;
-            height: 200px;
-            background-color: pink;
+        .font {
             text-align: center;
             line-height: 200px;
             font-size: 40px;
             color: rgba(240, 255, 255, 0.596);
+        }
+        .box {
+            width: 200px;
+            height: 200px;
+        }
+        .drag{
+            background-color: pink;
+        }
+        .show{
+            background-color:rgb(42, 66, 58);
         }
     </style>
 </head>
@@ -24,9 +31,14 @@
         <br/>
         <div>输入的值是：{{number}}</div>
         <br/>
-        <button @click="clickHandler">count is: {{data.count}}</button>
+        <button @click="clickHandler">count : {{data.count}}</button>
+        <br/>
+        <br/>
+        <div class="box drag font" draggable="true" @drag = 'handleDrag'>可拖动</div>
 
-        <div class="drag" draggable="true" @drag = 'handleDrag'>可拖动</div>
+        <button @click='handleToggle'>切换显示</button>
+        <div v-show="isShow" class=" box show font">展示和隐藏</div>
+
     </div>
 </body>
 <script src="../dist/bundle.js"></script>
@@ -49,12 +61,22 @@
             arr.shift()
             console.log(arr) // Proxy {0: 20, 1: 30, 2: 40}
 
+            let isShow = ref(true)
+            
+            const show = document.querySelector('.show')
+            const handleToggle = ()=> {
+                isShow.value = !isShow.value;  
+            }
+
             return {
+                isShow,
+
                 number,
                 data,
                 change: (e) => void (number.value = e.target.value),
                 clickHandler: () => void (data.count += 1),
-                handleDrag
+                handleDrag,
+                handleToggle
             }
         }
     })
