@@ -1,7 +1,7 @@
 # 一个简单的 MVVM 框架
 基于 `vue3` 的响应式原理实现的一个简单的 `MVVM` 模型
 
-![基本示例](.\static\基本示例.gif)
+![基本示例](static/基本示例.gif)
 
 框架主要实现的几个部分：
 - reactivity: 响应式数据 使用 proxy 数据代理实现数据劫持。
@@ -262,7 +262,7 @@ words.value = "World"; // Hello World
 
 效果如图：
 
-![响应式](.\static\响应式.gif)
+![响应式](static/响应式.gif)
 
 ### compiler 模板编译器 将其处理成 render 函数
 
@@ -362,7 +362,7 @@ const processElem = function (element: Element | Text) {
 
   效果如图：
 
-![v-show](.\static\v-show.gif)
+![v-show](static/v-show.gif)
 
 ##### 处理元素属性
 
@@ -419,7 +419,7 @@ const processAttrs = function ({ attributes }: Element) {
 
 如此一来 `compile`方法就基本实现了:
 
-![模板编译结果](.\static\模板编译结果.png)
+![模板编译结果](static/模板编译结果.png)
 
 
 
@@ -487,7 +487,7 @@ export const createText: createText = function (value) {
 
 生成后的 vnode 如图所示：
 
-![vnode](.\static\vnode.png)
+![vnode](static/vnode.png)
 
 
 
@@ -585,8 +585,6 @@ const processSetup = function (instance: ComponentInstance) {
 
 `mount` 方法接受一个元素选择器，所以可以通过选择器拿到需要挂载的 dom 元素，首先将目标 dom 树编译成 render 函数。接着处理 `setup` 方法拿到数据对象，并代理到 instance 上，这样就可以用 `this.xxx` 获取对应数据。接着再调用 render 方法获得 `vnode`。 有了 vnode 之后就可以去生成元素挂载了。
 
-
-
 ### patch
 
 初始化时的挂载
@@ -643,7 +641,7 @@ function vnodeToElem(vnode: VNode) {
 
 此时的效果如图：
 
-![页面挂载](.\static\页面挂载.png)
+![页面挂载](static/页面挂载.png)
 
 这样第一次处理并调用 `render` 函数时会进行依赖收集，之后每次数据变化都会调用 `instance.update` 来试试刷新页面
 
@@ -723,5 +721,5 @@ diff 过程中对每一个节点进行比较，不同的话就直接替换整个
 
 在 `mount` 方法中，使用 `effect` 方法包裹 render 方法和 patch 过程，因此页面就变成响应式的了，也就实现了双向绑定。
 
-![双向绑定](.\static\双向绑定.gif)
+![双向绑定](static/双向绑定.gif)
 
