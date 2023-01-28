@@ -113,6 +113,10 @@ export interface ReactiveEffect<T = any> {
 
 let activeEffect: ReactiveEffect | undefined; //只要当前 activeEffect 存在，就把它存进 targetMap 的对应位置中，这样就完成了一次依赖收集。
 
+/**
+ * 用于包装一个方法，在 `render` 函数中用于响应触发依赖 和 后续的 patch 过程
+ * 相当于一个简易的 watcher
+ */
 export const effect = function <T = any>(
   fn: (...args: any[]) => T
 ): ReactiveEffect<T> {
