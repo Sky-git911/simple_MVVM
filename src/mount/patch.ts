@@ -1,6 +1,7 @@
 import { ComponentInstance } from "./createAPP";
 import { getValue, isRef, isSameVNode } from "../utils";
 import { NodeType, VNode } from "../vnode/vnode";
+import { effect } from "../reactivity/reactive";
 
 export function patch(
   oldVNode: VNode | undefined,
@@ -64,9 +65,11 @@ function vnodeToElem(vnode: VNode) {
   }
   //   绑定元素事件
   for (let key in vnode.event) {
-    // if (key === "show") {
-    //   el.style.display = getValue(vnode.event[key]) ? "inherit" : "none";
-    // } toDo...
+    if (key === "show") {
+      effect(function () {
+        el.style.display = getValue(vnode.event[key]) ? "inherit" : "none";
+      });
+    }
     el.addEventListener(key, vnode.event[key]);
   }
   //   循环递归生成子元素

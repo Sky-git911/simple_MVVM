@@ -63,9 +63,9 @@ const processAttrs = function ({ attributes }: Element) {
     } else if (name[0] === "@") {
       // @ 开头的事件
       options.event.push(`${name.slice(1)}:${value}`);
-      // } else if (name[0] === "v") {  toDo...
-      //   // v- 开头的事件
-      //   options.event.push(`${name.split("-")[1]}:${value}`);
+    } else if (name[0] === "v") {
+      // v- 开头的事件
+      options.event.push(`${name.split("-")[1]}:${value}`);
     } else {
       // 原生的元素属性 如 class="box"
       options.attrs.push(`${name}:"${value}"`);
