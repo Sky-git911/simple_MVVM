@@ -417,7 +417,7 @@ const processAttrs = function ({ attributes }: Element) {
 
 如此一来 `compile`方法就基本实现了:
 
-![模板编译结果](.\static\模板编译结果.png)
+![模板编译结果](static/模板编译结果.png)
 
 
 
@@ -485,7 +485,7 @@ export const createText: createText = function (value) {
 
 生成后的 vnode 如图所示：
 
-![vnode](.\static\vnode.png)
+![vnode](static/vnode.png)
 
 
 
@@ -641,7 +641,7 @@ function vnodeToElem(vnode: VNode) {
 
 此时的效果如图：
 
-![页面挂载](.\static\页面挂载.png)
+![页面挂载](static/页面挂载.png)
 
 这样第一次处理并调用 `render` 函数时会进行依赖收集，之后每次数据变化都会调用 `instance.update` 来试试刷新页面
 
@@ -721,5 +721,5 @@ diff 过程中对每一个节点进行比较，不同的话就直接替换整个
 
 在 `mount` 方法中，使用 `effect` 方法包裹 render 方法和 patch 过程，因此页面就变成响应式的了，也就实现了双向绑定。
 
-![双向绑定](.\static\双向绑定.gif)
+![双向绑定](static/双向绑定.gif)
 
