@@ -329,7 +329,7 @@ const processElem = function (element: Element | Text) {
 
 ##### 可扩展性
 
-> 这边使用 `forEach`  遍历元素的所有属性，通过 `if` 语句判断属性/事件类型，还可以后续实现其他事件方法 如 `v-show` `v-if` `v-for` 等等
+> 这边使用 `forEach`  遍历元素的所有属性，通过 `if` 语句判断属性/事件类型，还可以后续实现其他事件方法 如  `v-if` `v-for`  `v-html`等等
 >
 > 例: else if (name[0] === "v") {  toDo...
 >
@@ -340,6 +340,29 @@ const processElem = function (element: Element | Text) {
 > }
 >
 > 后续在将 虚拟节点 转为 真实 dom 节点时， 可对 上述 事件做后续处理
+
+##### `v-show`
+
+此处以实现 `v-show` 为例：在处理元素属性时，将 `v-` 开头的事件添加至 `elemOption` 的 `event` 中，后续在将 `vnode` 转为真实 `dom` 时，对事件进行响应式处理
+
+```js
+// in patch.ts -> function vnodeToElem
+//   绑定元素事件
+  for (let key in vnode.event) {
+    if (key === "show") {
+      effect(function () {
+        el.style.display = getValue(vnode.event[key]) ? "inherit" : "none";
+      });
+    }
+    el.addEventListener(key, vnode.event[key]);
+  }
+```
+
+
+
+
+
+
 
 ```ts
 const processAttrs = function ({ attributes }: Element) {
@@ -358,6 +381,9 @@ const processAttrs = function ({ attributes }: Element) {
     } else if (name[0] === "@") {
       // @ 开头的事件
       options.event.push(`${name.slice(1)}:${value}`);
+    } else if (name[0] === "v") {
+      // v- 开头的事件
+      options.event.push(`${name.split("-")[1]}:${value}`);
     } else {
       // 原生的元素属性 如 class="box"
       options.attrs.push(`${name}:"${value}"`);
